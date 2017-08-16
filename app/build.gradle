@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'android-apt'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.example.administrator.cook"
+        applicationId "com.ren.cook"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -16,6 +16,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    productFlavors {
     }
 }
 
@@ -29,4 +31,7 @@ dependencies {
     compile files('libs/volley.jar')
     compile 'com.android.support:design:26.0.0-alpha1'
     compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.amap.api:location:latest.integration'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }

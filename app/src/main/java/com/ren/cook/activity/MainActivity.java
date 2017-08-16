@@ -1,30 +1,22 @@
 package com.ren.cook.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.ren.cook.R;
 import com.ren.cook.bean.Weather;
-import com.ren.cook.bean.WeatherResult;
-import com.ren.cook.http.GsonRequest;
-import com.ren.cook.http.GsonResponse;
 import com.ren.cook.http.HttpApi;
-import com.ren.cook.utils.StatusBarUtil;
-
-import org.json.JSONObject;
+import com.ren.cook.http.VolleyInterface;
+import com.ren.cook.http.VolleyRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Map;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2017/8/15
@@ -33,27 +25,41 @@ import java.net.URLEncoder;
 public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        StatusBarUtil.setColor(this, Color.WHITE);
+//        StatusBarUtil.setColor(this, getResources().getColor(R.color.mainColor));
         setContentView(R.layout.activity_main);
-        RequestQueue mQueue = Volley.newRequestQueue(getApplicationContext());
-        String city= null;
+        ButterKnife.bind(this);
+        String city= getIntent().getStringExtra("city");
         try {
-             city=URLEncoder.encode("北京","UTF-8");
+             city=URLEncoder.encode(city,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        GsonRequest jsonObjectRequest = new GsonRequest(Request.Method.GET,"https://way.jd.com/jisuapi/weather?city="+city+"&appkey=08ad4a362586453ce72438b77241ea44", null,
-                new GsonResponse<Weather>(Weather.class) {
-                    @Override
-                    public void getResponse(Weather weather) {
-                        Log.d("rq","");
-                    }
-                }, new Response.ErrorListener() {
+        Map<String,String> map=HttpApi.getWeatherMap();
+        map.put("city",city);
+        String Url=HttpApi.paramsCastUrl();
+        VolleyRequest.getInstance(this).RequestGet(Url, map,new VolleyInterface<Weather>(Weather.class) {
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onMySuccess(Weather result) {
+                Log.d("rq","");
+            }
+
+            @Override
+            public void onMyError(VolleyError error) {
+                Log.d("rq","");
             }
         });
-        mQueue.add(jsonObjectRequest);
+//        GsonRequest jsonObjectRequest = new GsonRequest(Request.Method.GET,"https://way.jd.com/jisuapi/weather?city="+city+"&appkey=08ad4a362586453ce72438b77241ea44", null,
+//                new GsonResponse<Weather>(Weather.class) {
+//                    @Override
+//                    public void getResponse(Weather weather) {
+//                        Log.d("rq","");
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//            }
+//        });
+//        mQueue.add(jsonObjectRequest);
         super.onCreate(savedInstanceState);
     }
 }
