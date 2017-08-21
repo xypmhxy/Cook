@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="mainColor">#EAE7DE</color>
+    <color name="statusBarColor">#a6d903</color>
     <color name="textColor">#FDA115</color>
 </resources>

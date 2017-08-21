@@ -11,6 +11,7 @@ public class HttpApi {
     public static  String WHEATHER_URL_BEFORE="https://way.jd.com/jisuapi/weather?city=";
     public static  String WHEATHER_URL="https://way.jd.com/jisuapi/weather";
     public static  String WHEATHER_URL_AFTER="&appkey=08ad4a362586453ce72438b77241ea44";
+    public static  String FOOD_TYPE_URL="https://way.jd.com/jisuapi/recipe_class?appkey=08ad4a362586453ce72438b77241ea44";
     private static Map<String,String>weatherMap;
 
     public static Map<String,String>getWeatherMap(){

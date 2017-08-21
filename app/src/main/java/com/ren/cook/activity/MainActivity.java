@@ -3,19 +3,22 @@ package com.ren.cook.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.widget.GridView;
 
 import com.android.volley.VolleyError;
 import com.ren.cook.R;
-import com.ren.cook.bean.Weather;
+import com.ren.cook.adapter.MainGridViewAdapter;
+import com.ren.cook.bean.FoodResult;
 import com.ren.cook.http.HttpApi;
 import com.ren.cook.http.VolleyInterface;
 import com.ren.cook.http.VolleyRequest;
+import com.ren.cook.utils.StatusBarUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -23,9 +26,12 @@ import butterknife.ButterKnife;
  */
 
 public class MainActivity extends AppCompatActivity{
+    @BindView(R.id.gridview_main)
+    GridView gridView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-//        StatusBarUtil.setColor(this, getResources().getColor(R.color.mainColor));
+        super.onCreate(savedInstanceState);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.statusBarColor));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         String city= getIntent().getStringExtra("city");
@@ -37,29 +43,17 @@ public class MainActivity extends AppCompatActivity{
         Map<String,String> map=HttpApi.getWeatherMap();
         map.put("city",city);
         String Url=HttpApi.paramsCastUrl();
-        VolleyRequest.getInstance(this).RequestGet(Url, map,new VolleyInterface<Weather>(Weather.class) {
+        VolleyRequest.getInstance(this).RequestGet(HttpApi.FOOD_TYPE_URL, map,new VolleyInterface<FoodResult>(FoodResult.class) {
             @Override
-            public void onMySuccess(Weather result) {
-                Log.d("rq","");
+            public void onMySuccess(FoodResult   result) {
+                MainGridViewAdapter adapter=new MainGridViewAdapter(result.getResult().getResult(),MainActivity.this);
+                gridView.setAdapter(adapter);
             }
 
             @Override
             public void onMyError(VolleyError error) {
-                Log.d("rq","");
             }
         });
-//        GsonRequest jsonObjectRequest = new GsonRequest(Request.Method.GET,"https://way.jd.com/jisuapi/weather?city="+city+"&appkey=08ad4a362586453ce72438b77241ea44", null,
-//                new GsonResponse<Weather>(Weather.class) {
-//                    @Override
-//                    public void getResponse(Weather weather) {
-//                        Log.d("rq","");
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//            }
-//        });
-//        mQueue.add(jsonObjectRequest);
-        super.onCreate(savedInstanceState);
+
     }
 }
