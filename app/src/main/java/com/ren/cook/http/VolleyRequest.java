@@ -13,22 +13,28 @@ import java.util.Map;
  * Created by Administrator on 2017/08/15 0015
  */
 
-public class VolleyRequest  {
+public class VolleyRequest {
     private static StringRequest stringRequest;
     private static RequestQueue mQueue;
     private static VolleyRequest volleyRequest;
 
-    private VolleyRequest(){}
-
-    public static VolleyRequest getInstance(Context mContext){
-        if (volleyRequest==null){
-            volleyRequest=new VolleyRequest();
-            mQueue=Volley.newRequestQueue(mContext);
-        }
-        return volleyRequest ;
+    private VolleyRequest() {
     }
-    public  void RequestGet(String url, final Map<String,String> map, VolleyInterface vif){
-        stringRequest=new StringRequest(Request.Method.GET, url,
+
+    public static VolleyRequest getInstance(Context mContext) {
+        if (volleyRequest == null) {
+            volleyRequest = new VolleyRequest();
+            mQueue = Volley.newRequestQueue(mContext);
+        }
+        return volleyRequest;
+    }
+
+    public static VolleyRequest getInstance() {
+        return volleyRequest;
+    }
+
+    public void RequestGet(String url, final Map<String, String> map, VolleyInterface vif) {
+        stringRequest = new StringRequest(Request.Method.GET, url,
                 vif.loadingListener(),
                 vif.errorListener()
         );
@@ -42,7 +48,8 @@ public class VolleyRequest  {
         //并且我们不应当手动调用start。
 //      MyApplication.getHttpQueues().start();
     }
-    public  void RequestPost(String url,final Map<String, String> params, VolleyInterface vif){
+
+    public void RequestPost(String url, final Map<String, String> params, VolleyInterface vif) {
 //        stringRequest = new StringRequest(url, vif.loadingListener(), vif.errorListener()){
 //            @Override
 //            protected Map<String, String> getParams() throws AuthFailureError {

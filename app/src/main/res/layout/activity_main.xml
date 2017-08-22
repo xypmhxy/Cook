@@ -11,6 +11,8 @@
 
     <include layout="@layout/layout_tittle"/>
 
+    <include layout="@layout/layout_search_bar"/>
+
     <include layout="@layout/layout_main_content"/>
 
 </LinearLayout>

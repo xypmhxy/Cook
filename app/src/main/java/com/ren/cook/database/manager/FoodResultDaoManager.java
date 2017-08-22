@@ -1,7 +1,6 @@
 package com.ren.cook.database.manager;
 
 import com.ren.cook.bean.FoodDataResult;
-import com.ren.cook.bean.FoodResult;
 import com.ren.cook.database.DBHelper;
 
 import java.util.List;
@@ -12,8 +11,8 @@ import java.util.List;
 
 public class FoodResultDaoManager {
 
-    public void insertToDB(FoodResult result) {
-        for (FoodDataResult foodDataResult : result.getResult().getResult()) {
+    public void insertToDB(List<FoodDataResult> result) {
+        for (FoodDataResult foodDataResult : result) {
             DBHelper.getInstance().getDaoSession().getFoodDataResultDao().insert(foodDataResult);
         }
     }
