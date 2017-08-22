@@ -1,5 +1,7 @@
 package com.ren.cook.bean;
 
+import org.greenrobot.greendao.annotation.Entity;
+
 /**
  * Created by Administrator on 2017/08/21 0021
  */
