@@ -28,7 +28,13 @@ public abstract class VolleyInterface<T>  {
         mListener = new Listener<String>() {
             @Override
             public void onResponse(String response) {
-                onMySuccess(gson.fromJson(response,cls));
+                try {
+                    onMySuccess(gson.fromJson(response,cls));
+                }catch (Exception e){
+                    e.printStackTrace();
+                    onMyError(new VolleyError(e.getMessage()));
+                }
+
             }
         };
         return mListener;

@@ -24,8 +24,6 @@ public class StringConverter implements PropertyConverter<List<Food>, String> {
         if (databaseValue == null) {
             return null;
         } else {
-            Log.e("rq","databaseValue "+"  ");
-            Log.e("rq","databaseValue "+databaseValue);
             Gson gson = new Gson();
             return gson.fromJson(databaseValue, new TypeToken<List<Food>>(){}.getType());
 
@@ -38,13 +36,7 @@ public class StringConverter implements PropertyConverter<List<Food>, String> {
             return null;
         } else {
             Gson gson=new Gson();
-            String entity=gson.toJson(entityProperty);
-            Log.d("rq","entity "+entity);
-            return entity;
-//            for (Food link : entityProperty) {
-//                sb.append(link.toString());
-//                sb.append(";");
-//            }
+            return gson.toJson(entityProperty);
         }
     }
 }

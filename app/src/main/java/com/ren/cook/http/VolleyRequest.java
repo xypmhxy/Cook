@@ -33,7 +33,8 @@ public class VolleyRequest {
         return volleyRequest;
     }
 
-    public void RequestGet(String url, final Map<String, String> map, VolleyInterface vif) {
+    public void RequestGet(String url,  Map<String, String> map, VolleyInterface vif) {
+        url=HttpApi.paramsCastUrl(url,map);
         stringRequest = new StringRequest(Request.Method.GET, url,
                 vif.loadingListener(),
                 vif.errorListener()

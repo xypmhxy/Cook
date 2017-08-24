@@ -45,8 +45,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.DetailActivity"/>
 
-        <service android:name="com.amap.api.location.APSService"/>
+        <activity android:name=".activity.PracticeActivity">
+
+        </activity>
+
+        <service android:name="com.amap.api.location.APSService"/><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
     </application>
 
 </manifest>
