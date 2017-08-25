@@ -5,11 +5,15 @@ import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ren.cook.R;
+import com.ren.cook.adapter.PracticeListAdapter;
 import com.ren.cook.bean.DetailFood;
+import com.ren.cook.widget.PullScaleListView;
+import com.ren.cook.widget.PullZoomListView;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -20,6 +24,8 @@ import butterknife.ButterKnife;
  */
 
 public class PracticeActivity extends BaseActivity {
+    @BindView(R.id.rela_continar)
+    RelativeLayout relativeLayout;
     @BindView(R.id.image_icon_practice)
     ImageView imageIconPractice;
     @BindView(R.id.text_name_practice)
@@ -29,7 +35,7 @@ public class PracticeActivity extends BaseActivity {
     @BindView(R.id.text_time_practice)
     TextView textTimePractice;
     @BindView(R.id.listview_practice)
-    ListView listviewPractice;
+    PullScaleListView listviewPractice;
     @BindView(R.id.btn_save_practice)
     Button btnSavePractice;
 
@@ -51,5 +57,7 @@ public class PracticeActivity extends BaseActivity {
         textNamePractice.setText(detailFood.getName());
         textPersonNumPractice.setText(detailFood.getPeoplenum());
         textTimePractice.setText(detailFood.getCookingtime());
+        listviewPractice.setHeaderContainer(relativeLayout,imageIconPractice);
+        listviewPractice.setAdapter(new PracticeListAdapter(detailFood,this));
     }
 }

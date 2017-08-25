@@ -10,19 +10,20 @@
     <include layout="@layout/layout_tittle"/>
 
     <RelativeLayout
+        android:id="@+id/rela_continar"
         android:layout_width="match_parent"
         android:layout_height="150dp">
 
         <ImageView
             android:id="@+id/image_icon_practice"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="match_parent"
             android:src="@drawable/type1"
             android:scaleType="centerCrop"/>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="match_parent"
             android:background="#25000000"/>
 
         <TextView
@@ -111,13 +112,15 @@
         android:textColor="@android:color/white"
         android:layout_marginStart="5dp"
         android:text="@string/material" />
-    <ListView
+
+    <com.ren.cook.widget.PullScaleListView
         android:id="@+id/listview_practice"
         android:layout_width="match_parent"
         android:layout_marginStart="5dp"
         android:layout_height="0dp"
         android:layout_weight="1"
         />
+
     <Button
         android:id="@+id/btn_save_practice"
         android:layout_width="220dp"

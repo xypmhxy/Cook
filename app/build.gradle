@@ -40,10 +40,12 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.amap.api:location:latest.integration'
     compile 'com.jakewharton:butterknife:8.4.0'
-    compile'org.greenrobot:greendao:3.0.1'
-    compile'org.greenrobot:greendao-generator:3.0.0'
+    compile 'org.greenrobot:greendao:3.0.1'
+    compile 'org.greenrobot:greendao-generator:3.0.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-
     compile('com.github.hotchemi:permissionsdispatcher:2.4.0') { exclude module: 'support-v13' }
     apt 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
+    compile 'com.squareup.picasso:picasso:2.3.2'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+    compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
 }
