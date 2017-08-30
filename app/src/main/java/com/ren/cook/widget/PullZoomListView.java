@@ -1,27 +1,19 @@
 package com.ren.cook.widget;
 
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.ViewConfigurationCompat;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.AbsListView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-
-import static android.R.attr.y;
-import static com.loc.cw.f;
 
 /**
  * Created by Administrator on 2017/8/25
@@ -182,9 +174,6 @@ public class PullZoomListView extends ListView {
                         dy = dy * 0.5f * (mHeaderHeight * 1.0f / params.height);
                         mLastScale = (dy + params.height) * 1.0f / mHeaderHeight;
                         mScale = clamp(mLastScale, 1.0f, mMaxScale);
-                        Log.e("rq",mScale+" ");
-                        mScale=2-mScale;
-                        Log.d("rq",mScale+" ");
                         params.height = (int) (mHeaderHeight * mScale);
                         mHeaderContainer.setLayoutParams(params);
                         mLastMotionY = y;

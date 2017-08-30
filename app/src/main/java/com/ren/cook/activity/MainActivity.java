@@ -23,7 +23,6 @@ import com.ren.cook.view.IFoodTypeView;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnEditorAction;
 import butterknife.OnItemClick;
 

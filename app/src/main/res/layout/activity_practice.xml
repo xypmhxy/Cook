@@ -12,7 +12,7 @@
     <RelativeLayout
         android:id="@+id/rela_continar"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="180dp">
 
         <ImageView
             android:id="@+id/image_icon_practice"
@@ -41,13 +41,16 @@
 
         <android.support.v7.widget.AppCompatRatingBar
             android:layout_width="wrap_content"
-            style="?android:attr/ratingBarStyleSmall"
-            android:rating="3.5"
-            android:layout_height="wrap_content"
+            android:layout_height="16dp"
+            android:rating="0"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="15dp"
             android:layout_marginEnd="15dp"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:progressDrawable="@drawable/rating_bar_laylist"
+            android:numStars="5"
+            android:stepSize="0.5"
+            />
 
     </RelativeLayout>
 

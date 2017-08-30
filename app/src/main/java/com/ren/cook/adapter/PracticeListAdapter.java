@@ -6,15 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ren.cook.R;
 import com.ren.cook.bean.DetailFood;
 import com.ren.cook.bean.Material;
-import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +53,7 @@ public class PracticeListAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
         }else
             viewHolder= (ViewHolder) convertView.getTag();
-        viewHolder.material.setText(data.getMname()+" "+data.getAmount());
+        viewHolder.material.setText("  "+data.getMname()+" "+data.getAmount());
         return convertView;
     }
 
