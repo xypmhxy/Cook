@@ -32,7 +32,7 @@ public abstract class VolleyInterface<T>  {
                     onMySuccess(gson.fromJson(response,cls));
                 }catch (Exception e){
                     e.printStackTrace();
-                    onMyError(new VolleyError(e.getMessage()));
+                    onMyError(new VolleyError(response));
                 }
 
             }

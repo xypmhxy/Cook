@@ -3,21 +3,20 @@ package com.ren.cook.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.ViewGroup;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.PopupWindow;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.ren.cook.R;
 import com.ren.cook.adapter.MainGridViewAdapter;
+import com.ren.cook.adapter.SearchListAdapter;
 import com.ren.cook.bean.DetailFood;
 import com.ren.cook.bean.FoodDataResult;
 import com.ren.cook.database.manager.FoodResultDaoManager;
@@ -43,13 +42,17 @@ public class MainActivity extends BaseActivity implements IFoodTypeView,ISearchV
     private static final String TAG = "MainActivity";
     @BindView(R.id.gridview_main)
     GridView gridView;
+    @BindView(R.id.listview_main)
+    ListView listView;
     @BindView(R.id.edit_search)
     EditText editSearch;
 
     private FoodResultDaoManager foodResultManager;
     private List<FoodDataResult> datas;
+    private List<DetailFood> searchDatas;
     private SearchPresenter searchPresenter;
     private PopUpWindow popUpWindow;
+    private SearchListAdapter searchAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,12 +106,35 @@ public class MainActivity extends BaseActivity implements IFoodTypeView,ISearchV
 
     @OnTextChanged(R.id.edit_search)
     public void onTextChanged(CharSequence cs){
-        searchPresenter.search(cs.toString());
+        String text=cs.toString().trim();
+        if (text.length()==0){
+            listView.setVisibility(View.GONE);
+            gridView.setVisibility(View.VISIBLE);
+        }else{
+            searchPresenter.search(cs.toString());
+        }
     }
 
     @Override
     public void searchResult(List<DetailFood> list) {
-        popUpWindow.setListDatas(list);
-        popUpWindow.showAsDropDown(editSearch,0,30);
+        if (list.isEmpty()){
+            listView.setVisibility(View.GONE);
+            gridView.setVisibility(View.VISIBLE);
+            return ;
+        }else{
+            listView.setVisibility(View.VISIBLE);
+            gridView.setVisibility(View.GONE);
+        }
+        if (searchAdapter==null){
+            searchDatas=list;
+            searchAdapter=new SearchListAdapter(searchDatas,this);
+            listView.setAdapter(searchAdapter);
+        }else{
+            searchDatas.clear();
+            searchDatas.addAll(list);
+            searchAdapter.notifyDataSetChanged();
+        }
+//        popUpWindow.setListDatas(list);
+//        popUpWindow.showAsDropDown(editSearch,0,30);
     }
 }
