@@ -3,34 +3,43 @@ package com.ren.cook.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.ren.cook.R;
 import com.ren.cook.adapter.MainGridViewAdapter;
+import com.ren.cook.bean.DetailFood;
 import com.ren.cook.bean.FoodDataResult;
 import com.ren.cook.database.manager.FoodResultDaoManager;
 import com.ren.cook.http.HttpApi;
 import com.ren.cook.presenter.FoodTypePresenter;
+import com.ren.cook.presenter.SearchPresenter;
 import com.ren.cook.view.IFoodTypeView;
+import com.ren.cook.view.ISearchView;
+import com.ren.cook.widget.PopUpWindow;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnEditorAction;
 import butterknife.OnItemClick;
+import butterknife.OnTextChanged;
 
 /**
  * Created by Administrator on 2017/8/15
  */
 
-public class MainActivity extends BaseActivity implements IFoodTypeView,TextView.OnEditorActionListener {
+public class MainActivity extends BaseActivity implements IFoodTypeView,ISearchView {
     private static final String TAG = "MainActivity";
     @BindView(R.id.gridview_main)
     GridView gridView;
@@ -39,6 +48,8 @@ public class MainActivity extends BaseActivity implements IFoodTypeView,TextView
 
     private FoodResultDaoManager foodResultManager;
     private List<FoodDataResult> datas;
+    private SearchPresenter searchPresenter;
+    private PopUpWindow popUpWindow;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +65,8 @@ public class MainActivity extends BaseActivity implements IFoodTypeView,TextView
             FoodTypePresenter foodTypePresenter = new FoodTypePresenter(this);
             foodTypePresenter.requestFoodResult(HttpApi.FOOD_TYPE_URL);
         }
+        searchPresenter=new SearchPresenter(this);
+        popUpWindow=new PopUpWindow(this);
     }
 
     private void updateGridView(List<FoodDataResult> result) {
@@ -86,5 +99,16 @@ public class MainActivity extends BaseActivity implements IFoodTypeView,TextView
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("id", id);
         startActivity(intent);
+    }
+
+    @OnTextChanged(R.id.edit_search)
+    public void onTextChanged(CharSequence cs){
+        searchPresenter.search(cs.toString());
+    }
+
+    @Override
+    public void searchResult(List<DetailFood> list) {
+        popUpWindow.setListDatas(list);
+        popUpWindow.showAsDropDown(editSearch,0,30);
     }
 }

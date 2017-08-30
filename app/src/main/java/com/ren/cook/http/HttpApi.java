@@ -10,6 +10,7 @@ import java.util.Map;
 public class HttpApi {
     public static String FOOD_TYPE_URL = "https://way.jd.com/jisuapi/recipe_class?appkey=08ad4a362586453ce72438b77241ea44";
     public static String FOOD_URL = "https://way.jd.com/jisuapi/byclass";
+    public static String SEARCH_URL = "https://way.jd.com/jisuapi/search";
     private static Map<String, String> dataMap;
 
     public static Map<String, String> getdataMap() {
