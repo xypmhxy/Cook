@@ -17,11 +17,12 @@ import com.ren.cook.bean.DetailResult;
 import com.ren.cook.http.HttpApi;
 import com.ren.cook.http.VolleyInterface;
 import com.ren.cook.http.VolleyRequest;
+import com.ren.cook.presenter.SearchPresenter;
+import com.ren.cook.view.IFoodTypeView;
+import com.ren.cook.view.ISearchView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 
 import java.util.List;
 import java.util.Map;
@@ -29,12 +30,19 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import butterknife.OnTextChanged;
+
+import static android.R.attr.name;
 
 /**
  * Created by Administrator on 2017/8/23
  */
 
-public class DetailActivity extends BaseActivity implements OnLoadmoreListener{
+public class DetailActivity extends BaseActivity implements OnLoadmoreListener,ISearchView{
+
+    private static final int SEARCH_BY_ID=0;
+    private static final int SEARCH_BY_NAME=1;
+
     @BindView(R.id.image_search)
     ImageView imageSearch;
     @BindView(R.id.listview_detail)
@@ -45,34 +53,38 @@ public class DetailActivity extends BaseActivity implements OnLoadmoreListener{
     SmartRefreshLayout refreshLayout;
 
     private int start =0;
+    private int whichSearch=SEARCH_BY_ID;
     private  DetailListAdapter adapter;
     private List<DetailFood> datas;
+    private int  num=10;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        ButterKnife.bind(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setTittle("菜单");
         showBack();
         refreshLayout.autoRefresh();
-        requestDatas();
+        requestDatasById();
         refreshLayout.setOnLoadmoreListener(this);
     }
 
-    private void requestDatas() {
+    private void requestDatasById() {
         long id = getIntent().getLongExtra("id", -1);
         if (id == -1) {
-            Toast.makeText(this, "网络异常，稍后再试", Toast.LENGTH_SHORT).show();
+            requestDatasByName();
             return;
         }
-        final int num=10;
         Map<String, String> map = HttpApi.getdataMap();
         map.put("classid", id + "");
         map.put("start", start + "");
         map.put("num", num + "");
+        startRequest(map);
+    }
+
+    private void startRequest(Map<String, String> map){
         VolleyRequest.getInstance().RequestGet(HttpApi.FOOD_URL, map, new VolleyInterface<DetailResult>(DetailResult.class) {
             @Override
             public void onMySuccess(DetailResult result) {
@@ -102,9 +114,32 @@ public class DetailActivity extends BaseActivity implements OnLoadmoreListener{
         });
     }
 
+    private void requestDatasByName(){
+        whichSearch=SEARCH_BY_NAME;
+        String name=getIntent().getStringExtra("name");
+        if (name == null) {
+            Toast.makeText(this, "网络异常，稍后再试", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        SearchPresenter searchPresenter=new SearchPresenter(this);
+        searchPresenter.search(20,null,name);
+    }
+
+
+
     @Override
     public void onLoadmore(RefreshLayout refreshlayout) {
-        requestDatas();
+        if (whichSearch==SEARCH_BY_ID)
+            requestDatasById();
+        else{
+            Toast.makeText(this, "没有更多了 (⊙﹏⊙)", Toast.LENGTH_SHORT).show();
+            refreshLayout.finishLoadmore();
+        }
+    }
+
+    @OnTextChanged(R.id.edit_search)
+    public void onTextChanged(CharSequence cs){
+
     }
 
     @OnItemClick(R.id.listview_detail)
@@ -113,5 +148,23 @@ public class DetailActivity extends BaseActivity implements OnLoadmoreListener{
         Intent intent=new Intent(this,PracticeActivity.class);
         intent.putExtra("data",detailFood);
         startActivity(intent);
+    }
+
+    @Override
+    public void searchResult(List<DetailFood> list) {
+        num+=10;
+        if (adapter==null){
+            datas=list;
+            adapter = new DetailListAdapter(datas, DetailActivity.this);
+            listView.setAdapter(adapter);
+            refreshLayout.finishRefresh();
+            refreshLayout.setEnableRefresh(false);
+            refreshLayout.setEnableLoadmore(true);
+        }else{
+            datas.addAll(list);
+            adapter.notifyDataSetChanged();
+        }
+        refreshLayout.finishLoadmore();
+        start+=num;
     }
 }

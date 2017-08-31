@@ -1,24 +1,37 @@
 package com.ren.cook.bean;
 
+import com.ren.cook.database.MaterialConverter;
+import com.ren.cook.database.ProcessConverter;
+import com.ren.cook.database.StringConverter;
+
+import org.greenrobot.greendao.annotation.Convert;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+
 import java.io.Serializable;
 import java.util.List;
+import org.greenrobot.greendao.annotation.Generated;
+
+import static android.R.attr.rating;
 
 /**
  * Created by Administrator on 2017/8/23
  */
-
+@Entity
 public class DetailFood implements Serializable{
-    private String classid;
-
+    private long classid;
+    @Convert(columnType = String.class, converter = ProcessConverter.class)
     private List<Process> process ;
 
     private String preparetime;
-
+    @Convert(columnType = String.class, converter = MaterialConverter.class)
     private List<Material> material ;
 
     private String name;
+    @Id(autoincrement = false)
+    private long id;
 
-    private String id;
+    private float rating;
 
     private String pic;
 
@@ -30,11 +43,39 @@ public class DetailFood implements Serializable{
 
     private String cookingtime;
 
-    public void setClassid(String classid){
+    @Generated(hash = 1002493402)
+    public DetailFood(long classid, List<Process> process, String preparetime,
+            List<Material> material, String name, long id, float rating,
+            String pic, String tag, String peoplenum, String content,
+            String cookingtime) {
+        this.classid = classid;
+        this.process = process;
+        this.preparetime = preparetime;
+        this.material = material;
+        this.name = name;
+        this.id = id;
+        this.rating = rating;
+        this.pic = pic;
+        this.tag = tag;
+        this.peoplenum = peoplenum;
+        this.content = content;
+        this.cookingtime = cookingtime;
+    }
+    @Generated(hash = 1342496064)
+    public DetailFood() {
+    }
+
+    public void setClassid(long classid){
         this.classid = classid;
     }
-    public String getClassid(){
+    public long getClassid(){
         return this.classid;
+    }
+    public float getRating() {
+        return rating;
+    }
+    public void setRating(float rating) {
+        this.rating = rating;
     }
     public void setProcess(List<Process> process){
         this.process = process;
@@ -60,10 +101,10 @@ public class DetailFood implements Serializable{
     public String getName(){
         return this.name;
     }
-    public void setId(String id){
+    public void setId(long id){
         this.id = id;
     }
-    public String getId(){
+    public long getId(){
         return this.id;
     }
     public void setPic(String pic){

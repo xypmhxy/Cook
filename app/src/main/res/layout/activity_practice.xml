@@ -40,6 +40,7 @@
             android:layout_alignParentStart="true" />
 
         <android.support.v7.widget.AppCompatRatingBar
+            android:id="@+id/ratingbar"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:rating="0"

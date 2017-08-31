@@ -2,17 +2,30 @@ package com.ren.cook.bean;
 
 import java.io.Serializable;
 
+import static android.R.attr.rating;
+
 /**
- * Created by Administrator on 2017/8/23.
+ * Created by Administrator on 2017/8/23
  */
 
 public class Material implements Serializable {
+
+    private boolean already;
+
+
+
     private String amount;
 
     private String mname;
 
     private String type;
 
+    public boolean isAlready() {
+        return already;
+    }
+    public void setAlready(boolean already) {
+        this.already = already;
+    }
     public void setAmount(String amount){
         this.amount = amount;
     }

@@ -1,5 +1,9 @@
 package com.ren.cook.presenter;
 
+import android.support.v4.widget.ContentLoadingProgressBar;
+import android.view.View;
+import android.widget.ProgressBar;
+
 import com.android.volley.VolleyError;
 import com.ren.cook.bean.FoodResult;
 import com.ren.cook.http.VolleyInterface;
@@ -20,7 +24,8 @@ public class FoodTypePresenter {
         foodTypeImp = new FoodTypeModelImp();
     }
 
-    public void requestFoodResult(String url) {
+    public void requestFoodResult(ProgressBar progressbar, String url) {
+        progressbar.setVisibility(View.VISIBLE);
         foodTypeImp.requestFoodType(url, new VolleyInterface<FoodResult>(FoodResult.class) {
             @Override
             public void onMySuccess(FoodResult result) {

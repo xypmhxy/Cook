@@ -15,14 +15,14 @@ import java.util.Map;
 
 public class SearchModelImp implements ISearchModel {
     @Override
-    public void search(String text, VolleyInterface<DetailResult>volleyInterface) {
+    public void search(int num,String text, VolleyInterface<DetailResult>volleyInterface) {
         Map<String,String>map=HttpApi.getdataMap();
         try {
             map.put("keyword", URLEncoder.encode(text,"utf-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        map.put("num",10+"");
+        map.put("num",num+"");
         VolleyRequest.getInstance().RequestGet(HttpApi.SEARCH_URL,map,volleyInterface);
     }
 }

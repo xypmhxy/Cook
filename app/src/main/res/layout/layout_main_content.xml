@@ -24,4 +24,12 @@
         android:verticalSpacing="10dp"
         android:visibility="visible"
         />
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/progressbar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        />
 </RelativeLayout>

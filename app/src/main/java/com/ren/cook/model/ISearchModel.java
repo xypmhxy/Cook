@@ -8,5 +8,5 @@ import com.ren.cook.http.VolleyInterface;
  */
 
 public interface ISearchModel {
-    void search(String text,VolleyInterface<DetailResult> volleyInterface);
+    void search(int num,String text,VolleyInterface<DetailResult> volleyInterface);
 }

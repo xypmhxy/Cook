@@ -8,9 +8,11 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
+import com.ren.cook.bean.DetailFood;
 import com.ren.cook.bean.Food;
 import com.ren.cook.bean.FoodDataResult;
 
+import com.ren.greendao.gen.DetailFoodDao;
 import com.ren.greendao.gen.FoodDao;
 import com.ren.greendao.gen.FoodDataResultDao;
 
@@ -23,9 +25,11 @@ import com.ren.greendao.gen.FoodDataResultDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
+    private final DaoConfig detailFoodDaoConfig;
     private final DaoConfig foodDaoConfig;
     private final DaoConfig foodDataResultDaoConfig;
 
+    private final DetailFoodDao detailFoodDao;
     private final FoodDao foodDao;
     private final FoodDataResultDao foodDataResultDao;
 
@@ -33,22 +37,32 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
+        detailFoodDaoConfig = daoConfigMap.get(DetailFoodDao.class).clone();
+        detailFoodDaoConfig.initIdentityScope(type);
+
         foodDaoConfig = daoConfigMap.get(FoodDao.class).clone();
         foodDaoConfig.initIdentityScope(type);
 
         foodDataResultDaoConfig = daoConfigMap.get(FoodDataResultDao.class).clone();
         foodDataResultDaoConfig.initIdentityScope(type);
 
+        detailFoodDao = new DetailFoodDao(detailFoodDaoConfig, this);
         foodDao = new FoodDao(foodDaoConfig, this);
         foodDataResultDao = new FoodDataResultDao(foodDataResultDaoConfig, this);
 
+        registerDao(DetailFood.class, detailFoodDao);
         registerDao(Food.class, foodDao);
         registerDao(FoodDataResult.class, foodDataResultDao);
     }
     
     public void clear() {
+        detailFoodDaoConfig.getIdentityScope().clear();
         foodDaoConfig.getIdentityScope().clear();
         foodDataResultDaoConfig.getIdentityScope().clear();
+    }
+
+    public DetailFoodDao getDetailFoodDao() {
+        return detailFoodDao;
     }
 
     public FoodDao getFoodDao() {
