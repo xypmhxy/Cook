@@ -80,5 +80,6 @@ public class PracticeActivity extends BaseActivity {
             daoManager=new DetailFoodDaoManager();
         detailFood.setRating(ratingbar.getRating());
         daoManager.insertToDB(detailFood);
+        Toast.makeText(this, "保存成功", Toast.LENGTH_SHORT).show();
     }
 }

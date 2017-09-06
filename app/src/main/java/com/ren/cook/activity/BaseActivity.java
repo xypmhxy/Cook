@@ -1,5 +1,6 @@
 package com.ren.cook.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
@@ -7,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -90,6 +92,11 @@ public class BaseActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home :
                 finish();
+                return true ;
+            case  R.id.collection :
+                Intent intent=new Intent(this,DetailActivity.class);
+                intent.putExtra("isCollection",true);
+                startActivity(intent);
                 return true ;
         }
         return super.onOptionsItemSelected(item);

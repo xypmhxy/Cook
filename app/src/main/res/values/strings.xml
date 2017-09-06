@@ -2,7 +2,7 @@
     <string name="app_name">Cook</string>
     <string name="search">搜索</string>
     <string name="my_collection">我的菜谱</string>
-    <string name="add_collection">加入搜藏</string>
+    <string name="add_collection">加入收藏</string>
     <string name="material">原料</string>
     <string name="save_food">保存食谱</string>
 </resources>

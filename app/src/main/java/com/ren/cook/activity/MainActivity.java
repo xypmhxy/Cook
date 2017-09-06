@@ -39,6 +39,8 @@ import butterknife.OnEditorAction;
 import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
 
+import static android.R.attr.id;
+
 /**
  * Created by Administrator on 2017/8/15
  */
@@ -120,10 +122,9 @@ public class MainActivity extends BaseActivity implements IFoodTypeView, ISearch
     @OnItemClick({R.id.gridview_main, R.id.listview_main})
     public void OnItemClick(AdapterView<?> parent, int postion) {
         if (parent == gridView) {
-            long id = datas.get(postion).getList().get(0).getClassid();
-            Log.d(TAG, "id " + id);
+            postion+=2;
             Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("id", id);
+            intent.putExtra("id", Long.parseLong(postion+""));
             startActivity(intent);
         } else {
             Intent intent = new Intent(this, PracticeActivity.class);

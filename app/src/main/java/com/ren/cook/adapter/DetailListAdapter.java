@@ -6,13 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ren.cook.R;
 import com.ren.cook.bean.DetailFood;
 import com.ren.cook.bean.Food;
 import com.ren.cook.bean.FoodDataResult;
+import com.ren.cook.database.manager.DetailFoodDaoManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -27,11 +30,16 @@ import butterknife.ButterKnife;
 public class DetailListAdapter extends BaseAdapter {
 
     private List<DetailFood> datas;
+    private Context context;
     private LayoutInflater inflater;
+    private DetailFoodDaoManager detailFoodDaoManager;
+    private boolean isShowButton=true;
 
     public DetailListAdapter(List<DetailFood>datas, Context context) {
+        this.context=context;
         this.datas = datas;
         inflater=LayoutInflater.from(context);
+        detailFoodDaoManager=new DetailFoodDaoManager();
     }
 
     @Override
@@ -50,7 +58,7 @@ public class DetailListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         DetailFood data=getItem(position);
         ViewHolder viewHolder;
         if (convertView==null){
@@ -65,7 +73,22 @@ public class DetailListAdapter extends BaseAdapter {
                 .into(viewHolder.icon);
         viewHolder.name.setText(data.getName());
         viewHolder.detail.setText(data.getContent());
+        if (isShowButton){
+            viewHolder.save.setVisibility(View.VISIBLE);
+            viewHolder.save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    detailFoodDaoManager.insertToDB(datas.get(position));
+                    Toast.makeText(context,"收藏成功",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else
+            viewHolder.save.setVisibility(View.GONE);
         return convertView;
+    }
+
+    public void hideColletionButton(){
+        isShowButton=false;
     }
 
     class ViewHolder{
@@ -75,6 +98,8 @@ public class DetailListAdapter extends BaseAdapter {
         TextView name ;
         @BindView(R.id.text_detail_item_detail)
         TextView detail;
+        @BindView(R.id.btn_collection_detail_item)
+        Button save;
         public ViewHolder(View convertView){
             ButterKnife.bind(this,convertView);
         }

@@ -3,6 +3,7 @@ package com.ren.cook.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Menu;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,11 +15,11 @@ import com.ren.cook.R;
 import com.ren.cook.adapter.DetailListAdapter;
 import com.ren.cook.bean.DetailFood;
 import com.ren.cook.bean.DetailResult;
+import com.ren.cook.database.manager.DetailFoodDaoManager;
 import com.ren.cook.http.HttpApi;
 import com.ren.cook.http.VolleyInterface;
 import com.ren.cook.http.VolleyRequest;
 import com.ren.cook.presenter.SearchPresenter;
-import com.ren.cook.view.IFoodTypeView;
 import com.ren.cook.view.ISearchView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -28,11 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
-
-import static android.R.attr.name;
 
 /**
  * Created by Administrator on 2017/8/23
@@ -54,7 +52,9 @@ public class DetailActivity extends BaseActivity implements OnLoadmoreListener,I
 
     private int start =0;
     private int whichSearch=SEARCH_BY_ID;
+    private SearchPresenter searchPresenter;
     private  DetailListAdapter adapter;
+    private DetailFoodDaoManager daoManager;
     private List<DetailFood> datas;
     private int  num=10;
 
@@ -67,8 +67,15 @@ public class DetailActivity extends BaseActivity implements OnLoadmoreListener,I
         setTittle("菜单");
         showBack();
         refreshLayout.autoRefresh();
+        searchPresenter=new SearchPresenter(this);
+        daoManager=new DetailFoodDaoManager();
         requestDatasById();
         refreshLayout.setOnLoadmoreListener(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return getIntent().getBooleanExtra("isCollection",false) || super.onCreateOptionsMenu(menu);
     }
 
     private void requestDatasById() {
@@ -118,14 +125,24 @@ public class DetailActivity extends BaseActivity implements OnLoadmoreListener,I
         whichSearch=SEARCH_BY_NAME;
         String name=getIntent().getStringExtra("name");
         if (name == null) {
-            Toast.makeText(this, "网络异常，稍后再试", Toast.LENGTH_SHORT).show();
+            loadDatasFromDB();
             return;
         }
-        SearchPresenter searchPresenter=new SearchPresenter(this);
         searchPresenter.search(20,null,name);
     }
 
-
+    private void loadDatasFromDB(){
+        boolean isCollection=getIntent().getBooleanExtra("isCollection",false);
+        if (isCollection){
+            setTittle("我的收藏");
+            datas=daoManager.queryAll();
+            adapter = new DetailListAdapter(datas, DetailActivity.this);
+            adapter.hideColletionButton();
+            listView.setAdapter(adapter);
+            return ;
+            }
+        Toast.makeText(this, "网络异常，稍后再试", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onLoadmore(RefreshLayout refreshlayout) {
@@ -139,7 +156,9 @@ public class DetailActivity extends BaseActivity implements OnLoadmoreListener,I
 
     @OnTextChanged(R.id.edit_search)
     public void onTextChanged(CharSequence cs){
-
+        refreshLayout.setEnableRefresh(true);
+        refreshLayout.autoRefresh();
+        searchPresenter.search(20,null,cs.toString());
     }
 
     @OnItemClick(R.id.listview_detail)
@@ -152,19 +171,19 @@ public class DetailActivity extends BaseActivity implements OnLoadmoreListener,I
 
     @Override
     public void searchResult(List<DetailFood> list) {
-        num+=10;
+        refreshLayout.finishRefresh();
+        refreshLayout.finishLoadmore();
+        refreshLayout.setEnableRefresh(false);
+        refreshLayout.setEnableLoadmore(true);
         if (adapter==null){
             datas=list;
             adapter = new DetailListAdapter(datas, DetailActivity.this);
             listView.setAdapter(adapter);
-            refreshLayout.finishRefresh();
-            refreshLayout.setEnableRefresh(false);
-            refreshLayout.setEnableLoadmore(true);
         }else{
+            datas.clear();
             datas.addAll(list);
             adapter.notifyDataSetChanged();
         }
         refreshLayout.finishLoadmore();
-        start+=num;
     }
 }

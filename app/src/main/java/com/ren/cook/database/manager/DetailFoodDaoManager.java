@@ -17,10 +17,16 @@ public class DetailFoodDaoManager {
             DBHelper.getInstance().getDaoSession().getDetailFoodDao().insertOrReplace(detailFood);
     }
 
-    public List<DetailFood> queryAllFromDB(long classid) {
+    public List<DetailFood> queryById(long classid) {
         return  DBHelper.getInstance().getDaoSession().getDetailFoodDao().queryBuilder()
                 .where(DetailFoodDao.Properties.Id.eq(classid))
                 .limit(1)
+                .build()
+                .list();
+    }
+
+    public List<DetailFood> queryAll() {
+        return  DBHelper.getInstance().getDaoSession().getDetailFoodDao().queryBuilder()
                 .build()
                 .list();
     }
